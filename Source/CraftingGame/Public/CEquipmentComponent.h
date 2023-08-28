@@ -7,14 +7,28 @@
 #include "CEquipmentComponent.generated.h"
 
 
+UENUM(BlueprintType)
+enum class EToolType : uint8
+{
+	PICKAXE,
+	AXE,
+	NONE
+};
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CRAFTINGGAME_API UCEquipmentComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UCEquipmentComponent();
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Default")
+	EToolType Tool;
+
 
 protected:
 	// Called when the game starts

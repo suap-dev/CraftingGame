@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CInteractInterface.h"
+#include "CEquipmentComponent.h"
 #include "CNode.generated.h"
 
 UENUM(BlueprintType)
@@ -12,14 +13,6 @@ enum class EResourceType : uint8
 {
 	STONE,
 	WOOD
-};
-
-UENUM(BlueprintType)
-enum class EToolType : uint8
-{
-	PICKAXE,
-	AXE,
-	NONE
 };
 
 UCLASS()
