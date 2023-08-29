@@ -4,16 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CInventoryComponent.h"
 #include "CEquipmentComponent.generated.h"
-
-
-UENUM(BlueprintType)
-enum class EToolType : uint8
-{
-	PICKAXE,
-	AXE,
-	NONE
-};
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -27,8 +19,7 @@ public:
 
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Default")
-	EToolType Tool;
-
+	FCItemTool Tool;
 
 protected:
 	// Called when the game starts

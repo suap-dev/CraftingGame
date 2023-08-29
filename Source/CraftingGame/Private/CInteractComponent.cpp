@@ -24,10 +24,6 @@ void UCInteractComponent::Interact(AActor* Parent)
 
 	if (Camera)
 	{
-		check(GEngine);
-		GEngine->AddOnScreenDebugMessage(
-			-1, 2.0f, FColor::Blue, "Message");
-
 		FVector Start = Camera->GetComponentLocation();
 		FVector End = Start + Camera->GetComponentRotation().Vector() * 1000;
 
