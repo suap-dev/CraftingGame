@@ -31,8 +31,6 @@ public:
 	// DONT: Implement input actions, let's do this part in Blueprint for now
 	// 
 	// Implement movement and rotation functions that we can later connect with Enhanced Input:
-	// TODO: void MoveForward(float ScaleValue);
-	// TODO: void MoveRight(float ScaleValue);
 	// TODO: void LookUp(float Value); // not sure if this one is actualy necesary
 	// TODO: void LookRight(float Value);
 	// TODO: void Interact(AActor* Parent); // this should use the InteractComponent's Interact method
@@ -44,11 +42,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, Category="Default")
+	void MoveForward(float ScaleValue);
+
+	UFUNCTION(BlueprintCallable, Category="Default")
+	void MoveRight(float ScaleValue);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };

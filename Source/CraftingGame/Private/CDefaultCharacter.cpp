@@ -41,3 +41,12 @@ void ACDefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 }
 
+void ACDefaultCharacter::MoveForward(float ScaleValue)
+{
+	AddMovementInput(GetActorForwardVector(), ScaleValue);
+}
+
+void ACDefaultCharacter::MoveRight(float ScaleValue)
+{
+	AddMovementInput(GetActorRightVector(), ScaleValue);
+}
