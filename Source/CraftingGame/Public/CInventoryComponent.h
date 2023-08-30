@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Containers/Map.h"
+#include "Chaos/Map.h"
 #include "CInventoryComponent.generated.h"
 
-
+// TODO: EquipmentComponent and InventoryComponent should be merged into one
+// maybe with Equipment(all available slots) + Backpack(as a slot) which is a map?
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class CRAFTINGGAME_API UCInventoryComponent : public UActorComponent
 {
@@ -16,8 +17,8 @@ class CRAFTINGGAME_API UCInventoryComponent : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	UCInventoryComponent();
-	
-// 	TMap<FCItemBase, uint32> Contents;
+
+// 	TMap<FCItemTool, uint32> Contents;
 
 protected:
 	// Called when the game starts
@@ -49,18 +50,27 @@ enum class ECResourceType : uint8
 
 
 USTRUCT(BlueprintType)
-struct FCItemBase {
+struct FCItemBase
+{
 
 	GENERATED_BODY()
 
+	// TODO: fix UPROPERTY'ies
+	// Should it be Read/Write? I don't want to change the item's name
+	// after it's been created. Or do I?
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString ItemName;
+	FString	Name;
+
+	// TODO: ensure this is unique
+	uint16 ID;
+
+	// TODO: create hashing function for items. Maybe by ID, or ID and Name?
 
 };
 
 
 USTRUCT(BlueprintType)
-struct FCItemTool
+struct FCItemTool : public FCItemBase
 {
 	GENERATED_BODY()
 

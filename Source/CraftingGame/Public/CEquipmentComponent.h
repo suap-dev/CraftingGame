@@ -8,6 +8,8 @@
 #include "CEquipmentComponent.generated.h"
 
 
+// TODO: EquipmentComponent and InventoryComponent should be merged into one
+// maybe with Equipment(all available slots) + Backpack(as a slot) which is a map?
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CRAFTINGGAME_API UCEquipmentComponent : public UActorComponent
 {

@@ -6,14 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "CInteractInterface.h"
 #include "CEquipmentComponent.h"
+#include "CInventoryComponent.h"
 #include "CNode.generated.h"
-
-UENUM(BlueprintType)
-enum class EResourceType : uint8
-{
-	STONE,
-	WOOD
-};
 
 UCLASS()
 class CRAFTINGGAME_API ACNode : public AActor, public ICInteractInterface
@@ -32,7 +26,7 @@ public:
 
 	/** Indicate what tool is required for provided resource */
 	UFUNCTION(BlueprintCallable)
-	EToolType MatchingTool();
+	ECToolType MatchingTool();
 
 
 public:
@@ -42,7 +36,7 @@ public:
 
 	/** Type of the provided resource */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default", meta = (MultiLine = "true"))
-	EResourceType ResourceType;
+	ECResourceType ResourceType;
 
 	/** How much resource can this node hold */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")

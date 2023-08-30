@@ -3,11 +3,19 @@
 
 #include "CDefaultCharacter.h"
 
+#include "CInteractComponent.h"
+#include "CEquipmentComponent.h"
+#include "CInventoryComponent.h"
+
 // Sets default values
 ACDefaultCharacter::ACDefaultCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	InteractComp = CreateDefaultSubobject<UCInteractComponent>("InteractComp");
+	EquipmentComp = CreateDefaultSubobject<UCEquipmentComponent>("EquipmentComp");
+	InventoryComp = CreateDefaultSubobject<UCInventoryComponent>("InventoryComp");
 
 }
 

@@ -6,12 +6,12 @@
 // Sets default values
 ACNode::ACNode()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");	
+	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	RootComponent = MeshComp;
-	
+
 	ResourcesLeft = Capacity;
 
 	InitialScale = MeshComp->GetComponentTransform().GetScale3D();
@@ -25,9 +25,9 @@ void ACNode::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	TimeOfLastResourcesChange = GetWorld()->TimeSeconds;
-
 }
 
+// TODO: Finish this.
 void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 {
 	check(GEngine);
@@ -38,21 +38,56 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 	FString Message = InstigatorName + " interacted with " + SelfName;
 
 	GEngine->AddOnScreenDebugMessage(
-		-1, 2.0f, FColor::Yellow, Message);
+		-1, 2.0f, FColor::Blue, Message);
+
+	// Instigator's Equipment
+	UCEquipmentComponent* InstigEquipment =
+		InstigatorPawn->GetComponentByClass<UCEquipmentComponent>();
+
+	if (InstigEquipment)
+	{
+		FCItemTool IntigTool = InstigEquipment->Tool;
+		if (MatchingTool() == IntigTool.Type)
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1, 2.0f, FColor::Blue, "Tool OK.");
+			if (ResourcesLeft > 0)
+			{
+				UCInventoryComponent* InstigInventory =
+					InstigatorPawn->GetComponentByClass<UCInventoryComponent>();
+
+				if (InstigInventory)
+				{
+// 					TMap<FCItemBase, uint32>* Contents = &InstigInventory->Contents;
+// 					InstigInventory->Contents.Find()
+				}
+			}
+			else
+			{
+				GEngine->AddOnScreenDebugMessage(
+					-1, 2.0f, FColor::Purple, "But no resources left.");
+			}
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(
+				-1, 2.0f, FColor::Purple, "Wrong Tool");
+		}
+	}
 }
 
-EToolType ACNode::MatchingTool()
+ECToolType ACNode::MatchingTool()
 {
 	switch (ResourceType)
 	{
-	case EResourceType::STONE:
-		return EToolType::PICKAXE;
+	case ECResourceType::STONE:
+		return ECToolType::PICKAXE;
 		break;
-	case EResourceType::WOOD:
-		return EToolType::AXE;
+	case ECResourceType::WOOD:
+		return ECToolType::AXE;
 		break;
 	default:
-		return EToolType::NONE;
+		return ECToolType::NONE;
 	}
 }
 
@@ -60,7 +95,7 @@ EToolType ACNode::MatchingTool()
 void ACNode::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void ACNode::ResourcesChanged()
