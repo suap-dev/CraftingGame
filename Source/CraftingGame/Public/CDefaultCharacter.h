@@ -37,8 +37,7 @@ public:
 
 	// DONT: Implement input actions, let's do this part in Blueprint for now
 	// 
-	// Implement movement and rotation functions that we can later connect with Enhanced Input:
-	// TODO: void Interact(AActor* Parent); // this should use the InteractComponent's Interact method
+	// Implement movement and rotation functions that we can later connect with Enhanced Input:	
 	// TODO: some way of choosing a tool from Inventory and putting it in Equipment
 	// 
 	// TODO: remove redundant methods and connect behavior with Enhanced Input
