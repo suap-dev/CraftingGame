@@ -38,7 +38,7 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 	FString Message = InstigatorName + " interacted with " + SelfName;
 
 	GEngine->AddOnScreenDebugMessage(
-		-1, 2.0f, FColor::Blue, Message);
+		-1, 1.0f, FColor::Blue, Message);
 
 	// Instigator's Equipment
 	UCEquipmentComponent* InstigEquipment =
@@ -50,7 +50,7 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 		if (MatchingTool() == IntigTool.Type)
 		{
 			GEngine->AddOnScreenDebugMessage(
-				-1, 2.0f, FColor::Blue, "Tool OK.");
+				-1, 1.0f, FColor::Blue, "Tool OK.");
 			if (ResourcesLeft > 0)
 			{
 				UCInventoryComponent* InstigInventory =
@@ -65,13 +65,13 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 			else
 			{
 				GEngine->AddOnScreenDebugMessage(
-					-1, 2.0f, FColor::Purple, "But no resources left.");
+					-1, 1.0f, FColor::Purple, "But no resources left.");
 			}
 		}
 		else
 		{
 			GEngine->AddOnScreenDebugMessage(
-				-1, 2.0f, FColor::Purple, "Wrong Tool");
+				-1, 1.0f, FColor::Purple, "Wrong Tool");
 		}
 	}
 }

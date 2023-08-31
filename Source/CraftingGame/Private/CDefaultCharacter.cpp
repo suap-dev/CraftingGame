@@ -6,11 +6,12 @@
 #include "CInteractComponent.h"
 #include "CEquipmentComponent.h"
 #include "CInventoryComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 ACDefaultCharacter::ACDefaultCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	InteractComp = CreateDefaultSubobject<UCInteractComponent>("InteractComp");
@@ -23,14 +24,14 @@ ACDefaultCharacter::ACDefaultCharacter()
 void ACDefaultCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
 void ACDefaultCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-// 	FMath::Clamp(1.0, 2.0, 3.0);
+	// 	FMath::Clamp(1.0, 2.0, 3.0);
 
 }
 
@@ -44,9 +45,31 @@ void ACDefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 void ACDefaultCharacter::MoveForward(float ScaleValue)
 {
 	AddMovementInput(GetActorForwardVector(), ScaleValue);
+
 }
 
 void ACDefaultCharacter::MoveRight(float ScaleValue)
 {
 	AddMovementInput(GetActorRightVector(), ScaleValue);
+
+}
+
+void ACDefaultCharacter::LookUp(float Value)
+{
+	USpringArmComponent* SpringArm = GetComponentByClass<USpringArmComponent>();
+
+	if (SpringArm)
+	{
+		FRotator Rotation = SpringArm->GetRelativeRotation();
+		Rotation.Pitch =
+			FMath::Clamp(Rotation.Pitch + Value, MinCameraPitch, MaxCameraPitch);
+
+		SpringArm->SetRelativeRotation(Rotation);
+	}
+}
+
+void ACDefaultCharacter::LookRight(float Value)
+{
+	AddControllerYawInput(Value);
+
 }

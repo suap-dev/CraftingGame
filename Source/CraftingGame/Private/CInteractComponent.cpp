@@ -16,32 +16,52 @@ UCInteractComponent::UCInteractComponent()
 }
 
 
-void UCInteractComponent::Interact(AActor* Parent)
+void UCInteractComponent::Interact()
 {
-	// Should I first check if Parent is a Character class, preferably defined by me?
-	
-	UCameraComponent* Camera = Parent->GetComponentByClass<UCameraComponent>();
+	AActor* Owner = GetOwner();
+
+	// Should I first check if Owner is a Character class, preferably defined by me?
+	UCameraComponent* Camera = GetOwner()->GetComponentByClass<UCameraComponent>();
 
 	if (Camera)
 	{
 		FVector Start = Camera->GetComponentLocation();
 		FVector End = Start + Camera->GetComponentRotation().Vector() * 1000;
+		
+		FCollisionObjectQueryParams ObjectQueryParams;
+// 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(Owner);
 
 		FHitResult HitResult;
-		FCollisionObjectQueryParams QueryParams;
-		QueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
-		GetWorld()->LineTraceSingleByObjectType(HitResult, Start, End, QueryParams);
+		GetWorld()->LineTraceSingleByObjectType(
+			HitResult,
+			Start, End,
+			ObjectQueryParams, QueryParams);
 
 		AActor* HitActor = HitResult.GetActor();
 
+		if (HitActor)
+		{
+			check(GEngine);
+			GEngine->AddOnScreenDebugMessage(
+				-1, 1.0f, FColor::Blue,
+				Owner->GetName() + " have hit " + HitActor->GetName());
+
+		}
+
 		if (HitActor && HitActor->Implements<UCInteractInterface>())
 		{
-			ICInteractInterface::Execute_OnInteract(HitActor, Cast<APawn>(GetOwner()));
+			ICInteractInterface::Execute_OnInteract(HitActor, Cast<APawn>(Owner));
+
 		}
 
 		DrawDebugLine(
 			GetWorld(), Start, End,
 			FColor::Blue,
 			false, 2.0f, 0, 1.5f);
+
 	}
+
 }
