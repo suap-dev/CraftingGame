@@ -26,7 +26,8 @@ void UCInteractComponent::Interact()
 	if (Camera)
 	{
 		FVector Start = Camera->GetComponentLocation();
-		FVector End = Start + Camera->GetComponentRotation().Vector() * 1000;
+		FVector End = Start + Camera->GetForwardVector() * 1000;
+		
 		
 		FCollisionObjectQueryParams ObjectQueryParams;
 // 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
