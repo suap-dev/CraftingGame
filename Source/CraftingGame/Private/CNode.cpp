@@ -33,15 +33,8 @@ void ACNode::PostInitializeComponents()
 // Adequate to the strength of the tool and type of the resource?
 void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 {
-	check(GEngine);
-
-	FString SelfName = GetName();
-	FString InstigatorName = InstigatorPawn->GetName();
-
-	FString Message = InstigatorName + " interacted with " + SelfName;
-
-	GEngine->AddOnScreenDebugMessage(
-		-1, 1.0f, FColor::Blue, Message);
+	FString DebugMessage =
+		"\nSuccessfull interaction (" + GetNameSafe(InstigatorPawn) + "->" + GetName() + ")";
 
 	// Instigator's Equipment
 	UCEquipmentComponent* InstigEquipment =
@@ -52,8 +45,8 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 		FCItemTool IntigTool = InstigEquipment->Tool;
 		if (MatchingTool() == IntigTool.Type)
 		{
-			GEngine->AddOnScreenDebugMessage(
-				-1, 1.0f, FColor::Blue, "Tool OK.");
+			DebugMessage += "\nTool OK.";
+
 			if (ResourcesLeft > 0)
 			{
 				UCInventoryComponent* InstigInventory =
@@ -61,22 +54,29 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 
 				if (InstigInventory)
 				{
-// 					TMap<FCItemBase, uint32>* Contents = &InstigInventory->Contents;
-// 					InstigInventory->Contents.Find()
+					// 					TMap<FCItemBase, uint32>* Contents = &InstigInventory->Contents;
+					// 					InstigInventory->Contents.Find()
 				}
 			}
 			else
 			{
-				GEngine->AddOnScreenDebugMessage(
-					-1, 1.0f, FColor::Purple, "But no resources left.");
+				DebugMessage += "\nNo resources left.";
+
 			}
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(
-				-1, 1.0f, FColor::Purple, "Wrong Tool");
+			DebugMessage += "\nWrong Tool.";
+
 		}
+
 	}
+
+	DrawDebugString(
+		GetWorld(), FVector::Zero(),
+		DebugMessage,
+		this, FColor::White, /*Duration: */2.0f, /*bCastShadow: */true);
+
 }
 
 ECToolType ACNode::MatchingTool()
@@ -91,7 +91,9 @@ ECToolType ACNode::MatchingTool()
 		break;
 	default:
 		return ECToolType::NONE;
+
 	}
+
 }
 
 // Called when the game starts or when spawned

@@ -4,6 +4,8 @@
 #include "CInteractComponent.h"
 #include "CInteractInterface.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "../Private/KismetTraceUtils.h"
 
 // Sets default values for this component's properties
 UCInteractComponent::UCInteractComponent()
@@ -27,16 +29,16 @@ void UCInteractComponent::Interact()
 	{
 		FVector Start = Camera->GetComponentLocation();
 		FVector End = Start + Camera->GetForwardVector() * 1000;
-		
-		
+
+
 		FCollisionObjectQueryParams ObjectQueryParams;
-// 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		// 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(Owner);
 
 		FHitResult HitResult;
-		GetWorld()->LineTraceSingleByObjectType(
+		bool bHit = GetWorld()->LineTraceSingleByObjectType(
 			HitResult,
 			Start, End,
 			ObjectQueryParams, QueryParams);
@@ -45,11 +47,12 @@ void UCInteractComponent::Interact()
 
 		if (HitActor)
 		{
-			check(GEngine);
-			GEngine->AddOnScreenDebugMessage(
-				-1, 1.0f, FColor::Blue,
-				Owner->GetName() + " have hit " + HitActor->GetName());
-
+			DrawDebugString(
+				GetWorld(), FVector::Zero(),
+				FString::Printf(
+					TEXT("%s attempting interaction with %s"),
+					*Owner->GetName(), *HitActor->GetName()),
+				HitActor, FColor::Cyan, /*Duration: */2.0f, /*bCastShadow: */true);
 		}
 
 		if (HitActor && HitActor->Implements<UCInteractInterface>())
@@ -58,10 +61,10 @@ void UCInteractComponent::Interact()
 
 		}
 
-		DrawDebugLine(
+		DrawDebugLineTraceSingle(
 			GetWorld(), Start, End,
-			FColor::Blue,
-			false, 2.0f, 0, 1.5f);
+			EDrawDebugTrace::ForDuration, bHit, HitResult,
+			FColor::Blue, FColor::Green, 2.0f);
 
 	}
 
