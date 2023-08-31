@@ -21,11 +21,12 @@ UCInteractComponent::UCInteractComponent()
 void UCInteractComponent::Interact()
 {
 	AActor* Owner = GetOwner();
+	UCameraComponent* Camera = Owner->GetComponentByClass<UCameraComponent>();
 
-	// Should I first check if Owner is a Character class, preferably defined by me?
-	UCameraComponent* Camera = GetOwner()->GetComponentByClass<UCameraComponent>();
+	// I'm not checking if owner is character;
+	// I'm more interested if they have a camera component.
 
-	if (Camera)
+	if (ensure(Camera))
 	{
 		FVector Start = Camera->GetComponentLocation();
 		FVector End = Start + Camera->GetForwardVector() * 1000;
@@ -53,11 +54,11 @@ void UCInteractComponent::Interact()
 					TEXT("%s attempting interaction with %s"),
 					*Owner->GetName(), *HitActor->GetName()),
 				HitActor, FColor::Cyan, /*Duration: */2.0f, /*bCastShadow: */true);
-		}
+				if(HitActor->Implements<UCInteractInterface>())
+				{
+					ICInteractInterface::Execute_OnInteract(HitActor, Cast<APawn>(Owner));
 
-		if (HitActor && HitActor->Implements<UCInteractInterface>())
-		{
-			ICInteractInterface::Execute_OnInteract(HitActor, Cast<APawn>(Owner));
+				}
 
 		}
 

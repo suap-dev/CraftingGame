@@ -40,7 +40,7 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 	UCEquipmentComponent* InstigEquipment =
 		InstigatorPawn->GetComponentByClass<UCEquipmentComponent>();
 
-	if (InstigEquipment)
+	if (ensure(InstigEquipment))
 	{
 		FCItemTool IntigTool = InstigEquipment->Tool;
 		if (MatchingTool() == IntigTool.Type)
@@ -56,13 +56,16 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 				{
 					// 					TMap<FCItemBase, uint32>* Contents = &InstigInventory->Contents;
 					// 					InstigInventory->Contents.Find()
+					// 					
 				}
+
 			}
 			else
 			{
 				DebugMessage += "\nNo resources left.";
 
 			}
+
 		}
 		else
 		{
@@ -86,9 +89,11 @@ ECToolType ACNode::MatchingTool()
 	case ECResourceType::STONE:
 		return ECToolType::PICKAXE;
 		break;
+
 	case ECResourceType::WOOD:
 		return ECToolType::AXE;
 		break;
+
 	default:
 		return ECToolType::NONE;
 
@@ -106,11 +111,13 @@ void ACNode::BeginPlay()
 void ACNode::ResourcesChanged()
 {
 	TimeOfLastResourcesChange = GetWorld()->TimeSeconds;
+
 }
 
 double ACNode::TimeSinceLastResourcesChange()
 {
 	return GetWorld()->TimeSeconds - TimeOfLastResourcesChange;
+
 }
 
 void ACNode::AdjustScale()
@@ -124,6 +131,7 @@ void ACNode::AdjustScale()
 	NewScale.Y *= ScalingFactor;
 
 	MeshComp->SetWorldScale3D(NewScale);
+
 }
 
 // Called every frame
@@ -135,6 +143,7 @@ void ACNode::Tick(float DeltaTime)
 		ResourcesLeft++;
 		ResourcesChanged();
 		AdjustScale();
+
 	}
 
 }

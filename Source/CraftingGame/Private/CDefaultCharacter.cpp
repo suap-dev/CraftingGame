@@ -31,7 +31,6 @@ void ACDefaultCharacter::BeginPlay()
 void ACDefaultCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	// 	FMath::Clamp(1.0, 2.0, 3.0);
 
 }
 
@@ -58,14 +57,16 @@ void ACDefaultCharacter::LookUp(float Value)
 {
 	USpringArmComponent* SpringArm = GetComponentByClass<USpringArmComponent>();
 
-	if (SpringArm)
+	if (ensure(SpringArm))
 	{
 		FRotator Rotation = SpringArm->GetRelativeRotation();
 		Rotation.Pitch =
 			FMath::Clamp(Rotation.Pitch + Value, MinCameraPitch, MaxCameraPitch);
 
 		SpringArm->SetRelativeRotation(Rotation);
+
 	}
+
 }
 
 void ACDefaultCharacter::LookRight(float Value)
