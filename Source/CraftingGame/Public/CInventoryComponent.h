@@ -55,10 +55,7 @@ struct FCItemBase
 
 	GENERATED_BODY()
 
-	// TODO: fix UPROPERTY'ies
-	// Should it be Read/Write? I don't want to change the item's name
-	// after it's been created. Or do I?
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FString	Name;
 
 	// TODO: ensure this is unique

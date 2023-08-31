@@ -27,7 +27,10 @@ void ACNode::PostInitializeComponents()
 	TimeOfLastResourcesChange = GetWorld()->TimeSeconds;
 }
 
-// TODO: Finish this.
+// TODO: Add required reaction to interaction for CNode.
+// The reaction that is required is providing the Instigator's InventoryComponent
+// with adequate number of resources.
+// Adequate to the strength of the tool and type of the resource?
 void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 {
 	check(GEngine);
