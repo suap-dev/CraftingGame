@@ -13,5 +13,4 @@ UCLASS()
 class CRAFTINGGAME_API ACraftingGameGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
 };

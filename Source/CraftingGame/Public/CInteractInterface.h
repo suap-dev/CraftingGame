@@ -24,5 +24,4 @@ class CRAFTINGGAME_API ICInteractInterface
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnInteract(APawn* InstigatorPawn);
-
 };

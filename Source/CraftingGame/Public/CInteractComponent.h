@@ -18,6 +18,5 @@ public:
 
 	/** Scans for objects to interact, if they implement InteractInterface then do stuff */
 	UFUNCTION(BlueprintCallable)
-	void Interact();
-
+	void Interact() const;
 };

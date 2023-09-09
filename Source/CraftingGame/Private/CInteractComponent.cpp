@@ -18,15 +18,14 @@ UCInteractComponent::UCInteractComponent()
 }
 
 
-void UCInteractComponent::Interact()
+void UCInteractComponent::Interact() const
 {
 	AActor* Owner = GetOwner();
-	UCameraComponent* Camera = Owner->GetComponentByClass<UCameraComponent>();
 
 	// I'm not checking if owner is character;
 	// I'm more interested if they have a camera component.
 
-	if (ensure(Camera))
+	if (UCameraComponent* Camera = Owner->GetComponentByClass<UCameraComponent>(); ensure(Camera))
 	{
 		FVector Start = Camera->GetComponentLocation();
 		FVector End = Start + Camera->GetForwardVector() * 1000;
@@ -44,9 +43,7 @@ void UCInteractComponent::Interact()
 			Start, End,
 			ObjectQueryParams, QueryParams);
 
-		AActor* HitActor = HitResult.GetActor();
-
-		if (HitActor)
+		if (AActor* HitActor = HitResult.GetActor())
 		{
 			DrawDebugString(
 				GetWorld(), FVector::Zero(),
@@ -54,19 +51,15 @@ void UCInteractComponent::Interact()
 					TEXT("%s attempting interaction with %s"),
 					*Owner->GetName(), *HitActor->GetName()),
 				HitActor, FColor::Cyan, /*Duration: */2.0f, /*bCastShadow: */true);
-				if(HitActor->Implements<UCInteractInterface>())
-				{
-					ICInteractInterface::Execute_OnInteract(HitActor, Cast<APawn>(Owner));
-
-				}
-
+			if (HitActor->Implements<UCInteractInterface>())
+			{
+				ICInteractInterface::Execute_OnInteract(HitActor, Cast<APawn>(Owner));
+			}
 		}
 
 		DrawDebugLineTraceSingle(
 			GetWorld(), Start, End,
 			EDrawDebugTrace::ForDuration, bHit, HitResult,
 			FColor::Blue, FColor::Green, 2.0f);
-
 	}
-
 }

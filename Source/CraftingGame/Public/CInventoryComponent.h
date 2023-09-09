@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Chaos/Map.h"
 #include "CInventoryComponent.generated.h"
 
 // TODO: EquipmentComponent and InventoryComponent should be merged into one
@@ -18,7 +17,7 @@ public:
 	// Sets default values for this component's properties
 	UCInventoryComponent();
 
-// 	TMap<FCItemTool, uint32> Contents;
+	// 	TMap<FCItemTool, uint32> Contents;
 
 protected:
 	// Called when the game starts
@@ -26,43 +25,39 @@ protected:
 
 public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 };
 
 
 UENUM(BlueprintType)
 enum class ECToolType : uint8
 {
-	NONE,
-	PICKAXE,
-	AXE,
-
+	None,
+	Pickaxe,
+	Axe,
 };
 
 UENUM(BlueprintType)
 enum class ECResourceType : uint8
 {
-	STONE,
-	WOOD
+	Stone,
+	Wood
 };
 
 
 USTRUCT(BlueprintType)
 struct FCItemBase
 {
-
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FString	Name;
+	FString Name;
 
 	// TODO: ensure this is unique
 	uint16 ID;
 
 	// TODO: create hashing function for items. Maybe by ID, or ID and Name?
-
 };
 
 
@@ -72,11 +67,10 @@ struct FCItemTool : public FCItemBase
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ECToolType Type;
+	ECToolType Type = ECToolType::None;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	uint8 Power;
-
+	uint8 Power = 1;
 };
 
 
@@ -87,5 +81,4 @@ struct FCItemResource
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ECResourceType Type;
-
 };

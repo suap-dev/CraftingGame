@@ -20,12 +20,12 @@ void UCInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
 }
 
 
 // Called every frame
-void UCInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UCInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+                                         FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 

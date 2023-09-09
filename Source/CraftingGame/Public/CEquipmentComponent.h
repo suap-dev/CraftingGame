@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
 #include "CInventoryComponent.h"
+#include "Components/ActorComponent.h"
 #include "CEquipmentComponent.generated.h"
 
 
 // TODO: EquipmentComponent and InventoryComponent should be merged into one
 // maybe with Equipment(all available slots) + Backpack(as a slot) which is a map?
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CRAFTINGGAME_API UCEquipmentComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -27,9 +27,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 };

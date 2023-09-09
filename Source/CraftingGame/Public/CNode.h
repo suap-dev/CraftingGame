@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CInteractInterface.h"
-#include "CEquipmentComponent.h"
 #include "CInventoryComponent.h"
 #include "CNode.generated.h"
 
@@ -19,15 +18,14 @@ public:
 	ACNode();
 
 
-	void PostInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
-	void OnInteract_Implementation(APawn* InstigatorPawn) override;
+	virtual void OnInteract_Implementation(APawn* InstigatorPawn) override;
 
 
 	/** Indicate what tool is required for provided resource */
 	UFUNCTION(BlueprintCallable)
-	ECToolType MatchingTool();
-
+	ECToolType MatchingTool() const;
 
 public:
 	/** Please add a variable description */
@@ -58,16 +56,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Default")
 	float MinimalScalingFactor;
 
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void ResourcesChanged();
 
-	double TimeSinceLastResourcesChange();
+	double TimeSinceLastResourcesChange() const;
 
-	void AdjustScale();
+	void AdjustScale() const;
 
 private:
 	/** Holds the initial value of the scale for correct size adjustment */
@@ -78,9 +75,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Default")
 	double TimeOfLastResourcesChange;
 
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };

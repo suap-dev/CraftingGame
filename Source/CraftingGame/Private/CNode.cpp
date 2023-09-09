@@ -3,6 +3,8 @@
 
 #include "CNode.h"
 
+#include "CEquipmentComponent.h"
+
 // Sets default values
 ACNode::ACNode()
 {
@@ -15,7 +17,6 @@ ACNode::ACNode()
 	ResourcesLeft = Capacity;
 
 	InitialScale = MeshComp->GetComponentTransform().GetScale3D();
-
 }
 
 // this is called BEFORE BeginPlay, after the constructor.
@@ -34,104 +35,84 @@ void ACNode::PostInitializeComponents()
 void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 {
 	FString DebugMessage =
-		"\nSuccessfull interaction (" + GetNameSafe(InstigatorPawn) + "->" + GetName() + ")";
+		"\nSuccessful interaction (" + GetNameSafe(InstigatorPawn) + "->" + GetName() + ")";
 
 	// Instigator's Equipment
-	UCEquipmentComponent* InstigEquipment =
-		InstigatorPawn->GetComponentByClass<UCEquipmentComponent>();
-
-	if (ensure(InstigEquipment))
+	if (const UCEquipmentComponent* EquipmentComp =
+		Cast<UCEquipmentComponent>(InstigatorPawn->GetComponentByClass<UCEquipmentComponent>()); ensure(EquipmentComp))
 	{
-		FCItemTool IntigTool = InstigEquipment->Tool;
-		if (MatchingTool() == IntigTool.Type)
+		if (const FCItemTool Tool = EquipmentComp->Tool; MatchingTool() == Tool.Type)
 		{
 			DebugMessage += "\nTool OK.";
 
 			if (ResourcesLeft > 0)
 			{
-				UCInventoryComponent* InstigInventory =
-					InstigatorPawn->GetComponentByClass<UCInventoryComponent>();
-
-				if (InstigInventory)
-				{
-					// 					TMap<FCItemBase, uint32>* Contents = &InstigInventory->Contents;
-					// 					InstigInventory->Contents.Find()
-					// 					
-				}
-
+				// if (UCInventoryComponent* InventoryComp =
+				// 	Cast<UCInventoryComponent>(InstigatorPawn->GetComponentByClass<UCInventoryComponent>()))
+				// {
+				// 	// TMap<FCItemBase, uint32>* Contents = &InventoryComp->Contents;
+				// 	// InventoryComp->Contents.Find();
+				// }
 			}
 			else
 			{
 				DebugMessage += "\nNo resources left.";
-
 			}
-
 		}
 		else
 		{
 			DebugMessage += "\nWrong Tool.";
-
 		}
-
 	}
 
 	DrawDebugString(
 		GetWorld(), FVector::Zero(),
 		DebugMessage,
 		this, FColor::White, /*Duration: */2.0f, /*bCastShadow: */true);
-
 }
 
-ECToolType ACNode::MatchingTool()
+ECToolType ACNode::MatchingTool() const
 {
 	switch (ResourceType)
 	{
-	case ECResourceType::STONE:
-		return ECToolType::PICKAXE;
-		break;
+	case ECResourceType::Stone:
+		return ECToolType::Pickaxe;
 
-	case ECResourceType::WOOD:
-		return ECToolType::AXE;
-		break;
+	case ECResourceType::Wood:
+		return ECToolType::Axe;
 
 	default:
-		return ECToolType::NONE;
-
+		return ECToolType::None;
 	}
-
 }
 
 // Called when the game starts or when spawned
 void ACNode::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void ACNode::ResourcesChanged()
 {
 	TimeOfLastResourcesChange = GetWorld()->TimeSeconds;
-
 }
 
-double ACNode::TimeSinceLastResourcesChange()
+double ACNode::TimeSinceLastResourcesChange() const
 {
 	return GetWorld()->TimeSeconds - TimeOfLastResourcesChange;
-
 }
 
-void ACNode::AdjustScale()
+void ACNode::AdjustScale() const
 {
-	float ChangablePart = 1.0f - MinimalScalingFactor;
-	ChangablePart = ChangablePart * (ResourcesLeft / Capacity);
-	float ScalingFactor = MinimalScalingFactor + ChangablePart;
+	float ChangeablePart = 1.0f - MinimalScalingFactor;
+	ChangeablePart = ChangeablePart * (ResourcesLeft / Capacity);
+	const float ScalingFactor = MinimalScalingFactor + ChangeablePart;
 
 	FVector NewScale = InitialScale;
 	NewScale.X *= ScalingFactor;
 	NewScale.Y *= ScalingFactor;
 
 	MeshComp->SetWorldScale3D(NewScale);
-
 }
 
 // Called every frame
@@ -139,12 +120,10 @@ void ACNode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (ResourcesLeft < Capacity && TimeSinceLastResourcesChange() >= ReplenishTime) {
+	if (ResourcesLeft < Capacity && TimeSinceLastResourcesChange() >= ReplenishTime)
+	{
 		ResourcesLeft++;
 		ResourcesChanged();
 		AdjustScale();
-
 	}
-
 }
-

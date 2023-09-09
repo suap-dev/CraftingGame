@@ -53,7 +53,7 @@ protected:
 	void MoveRight(float ScaleValue);
 
 	UFUNCTION(BlueprintCallable, Category = "Default")
-	void LookUp(float Value); // not sure if this one is actually necessary
+	void LookUp(float Value) const; // not sure if this one is actually necessary
 
 	UFUNCTION(BlueprintCallable, Category = "Default")
 	void LookRight(float Value);

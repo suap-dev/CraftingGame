@@ -17,60 +17,49 @@ ACDefaultCharacter::ACDefaultCharacter()
 	InteractComp = CreateDefaultSubobject<UCInteractComponent>("InteractComp");
 	EquipmentComp = CreateDefaultSubobject<UCEquipmentComponent>("EquipmentComp");
 	InventoryComp = CreateDefaultSubobject<UCInventoryComponent>("InventoryComp");
-
 }
 
 // Called when the game starts or when spawned
 void ACDefaultCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
 void ACDefaultCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
 void ACDefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
-void ACDefaultCharacter::MoveForward(float ScaleValue)
+void ACDefaultCharacter::MoveForward(const float ScaleValue)
 {
 	AddMovementInput(GetActorForwardVector(), ScaleValue);
-
 }
 
-void ACDefaultCharacter::MoveRight(float ScaleValue)
+void ACDefaultCharacter::MoveRight(const float ScaleValue)
 {
 	AddMovementInput(GetActorRightVector(), ScaleValue);
-
 }
 
-void ACDefaultCharacter::LookUp(float Value)
+void ACDefaultCharacter::LookUp(const float Value) const
 {
-	USpringArmComponent* SpringArm = GetComponentByClass<USpringArmComponent>();
-
-	if (ensure(SpringArm))
+	if (USpringArmComponent* SpringArm = GetComponentByClass<USpringArmComponent>(); ensure(SpringArm))
 	{
 		FRotator Rotation = SpringArm->GetRelativeRotation();
 		Rotation.Pitch =
 			FMath::Clamp(Rotation.Pitch + Value, MinCameraPitch, MaxCameraPitch);
 
 		SpringArm->SetRelativeRotation(Rotation);
-
 	}
-
 }
 
-void ACDefaultCharacter::LookRight(float Value)
+void ACDefaultCharacter::LookRight(const float Value)
 {
 	AddControllerYawInput(Value);
-
 }

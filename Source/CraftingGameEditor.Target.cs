@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class CraftingGameEditorTarget : TargetRules
 {
-	public CraftingGameEditorTarget( TargetInfo Target) : base(Target)
+	public CraftingGameEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
