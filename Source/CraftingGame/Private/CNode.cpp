@@ -34,12 +34,11 @@ void ACNode::PostInitializeComponents()
 // Adequate to the strength of the tool and type of the resource?
 void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 {
-	FString DebugMessage =
-		"\nSuccessful interaction (" + GetNameSafe(InstigatorPawn) + "->" + GetName() + ")";
+	FString DebugMessage = "\nSuccessful interaction (" + GetNameSafe(InstigatorPawn) + "->" + GetName() + ")";
 
 	// Instigator's Equipment
-	if (const UCEquipmentComponent* EquipmentComp =
-		Cast<UCEquipmentComponent>(InstigatorPawn->GetComponentByClass<UCEquipmentComponent>()); ensure(EquipmentComp))
+	if (const UCEquipmentComponent* EquipmentComp = Cast<UCEquipmentComponent>(
+		InstigatorPawn->GetComponentByClass<UCEquipmentComponent>()); ensure(EquipmentComp))
 	{
 		if (const FCItemTool Tool = EquipmentComp->Tool; MatchingTool() == Tool.Type)
 		{
@@ -65,10 +64,8 @@ void ACNode::OnInteract_Implementation(APawn* InstigatorPawn)
 		}
 	}
 
-	DrawDebugString(
-		GetWorld(), FVector::Zero(),
-		DebugMessage,
-		this, FColor::White, /*Duration: */2.0f, /*bCastShadow: */true);
+	DrawDebugString(GetWorld(), FVector::Zero(), DebugMessage, this,
+	                FColor::White, /*Duration: */2.0f, /*bCastShadow: */true);
 }
 
 ECToolType ACNode::MatchingTool() const

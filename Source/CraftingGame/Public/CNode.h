@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "CInteractInterface.h"
 #include "CInventoryComponent.h"
+#include "GameFramework/Actor.h"
 #include "CNode.generated.h"
 
 UCLASS()
@@ -17,17 +17,14 @@ public:
 	// Sets default values for this actor's properties
 	ACNode();
 
-
 	virtual void PostInitializeComponents() override;
 
 	virtual void OnInteract_Implementation(APawn* InstigatorPawn) override;
-
 
 	/** Indicate what tool is required for provided resource */
 	UFUNCTION(BlueprintCallable)
 	ECToolType MatchingTool() const;
 
-public:
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Default")
 	TObjectPtr<UStaticMeshComponent> MeshComp;

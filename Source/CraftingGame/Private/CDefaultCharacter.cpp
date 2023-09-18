@@ -3,8 +3,8 @@
 
 #include "CDefaultCharacter.h"
 
-#include "CInteractComponent.h"
 #include "CEquipmentComponent.h"
+#include "CInteractComponent.h"
 #include "CInventoryComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -52,8 +52,7 @@ void ACDefaultCharacter::LookUp(const float Value) const
 	if (USpringArmComponent* SpringArm = GetComponentByClass<USpringArmComponent>(); ensure(SpringArm))
 	{
 		FRotator Rotation = SpringArm->GetRelativeRotation();
-		Rotation.Pitch =
-			FMath::Clamp(Rotation.Pitch + Value, MinCameraPitch, MaxCameraPitch);
+		Rotation.Pitch = FMath::Clamp(Rotation.Pitch + Value, MinCameraPitch, MaxCameraPitch);
 
 		SpringArm->SetRelativeRotation(Rotation);
 	}

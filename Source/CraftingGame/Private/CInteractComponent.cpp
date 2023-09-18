@@ -3,9 +3,9 @@
 
 #include "CInteractComponent.h"
 #include "CInteractInterface.h"
+#include "KismetTraceUtils.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "../Private/KismetTraceUtils.h"
 
 // Sets default values for this component's properties
 UCInteractComponent::UCInteractComponent()
@@ -17,14 +17,12 @@ UCInteractComponent::UCInteractComponent()
 	// ...
 }
 
-
 void UCInteractComponent::Interact() const
 {
 	AActor* Owner = GetOwner();
 
 	// I'm not checking if owner is character;
 	// I'm more interested if they have a camera component.
-
 	if (UCameraComponent* Camera = Owner->GetComponentByClass<UCameraComponent>(); ensure(Camera))
 	{
 		FVector Start = Camera->GetComponentLocation();
@@ -32,34 +30,27 @@ void UCInteractComponent::Interact() const
 
 
 		FCollisionObjectQueryParams ObjectQueryParams;
-		// 		ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		// ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(Owner);
 
 		FHitResult HitResult;
-		bool bHit = GetWorld()->LineTraceSingleByObjectType(
-			HitResult,
-			Start, End,
-			ObjectQueryParams, QueryParams);
+		bool bHit = GetWorld()->LineTraceSingleByObjectType(HitResult, Start, End, ObjectQueryParams, QueryParams);
 
 		if (AActor* HitActor = HitResult.GetActor())
 		{
-			DrawDebugString(
-				GetWorld(), FVector::Zero(),
-				FString::Printf(
-					TEXT("%s attempting interaction with %s"),
-					*Owner->GetName(), *HitActor->GetName()),
-				HitActor, FColor::Cyan, /*Duration: */2.0f, /*bCastShadow: */true);
+			DrawDebugString(GetWorld(), FVector::Zero(),
+			                FString::Printf(
+				                TEXT("%s attempting interaction with %s"), *Owner->GetName(), *HitActor->GetName()),
+			                HitActor, FColor::Cyan, /*Duration: */2.0f, /*bCastShadow: */true);
 			if (HitActor->Implements<UCInteractInterface>())
 			{
 				ICInteractInterface::Execute_OnInteract(HitActor, Cast<APawn>(Owner));
 			}
 		}
 
-		DrawDebugLineTraceSingle(
-			GetWorld(), Start, End,
-			EDrawDebugTrace::ForDuration, bHit, HitResult,
-			FColor::Blue, FColor::Green, 2.0f);
+		DrawDebugLineTraceSingle(GetWorld(), Start, End, EDrawDebugTrace::ForDuration, bHit, HitResult,
+		                         FColor::Blue, FColor::Green, 2.0f);
 	}
 }
